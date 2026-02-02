@@ -1,0 +1,80 @@
+package org.acme.model;
+
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+// Response Data Transfer Object som skickas till frontend. 
+// Innehåller de fält som vi vill visa till klient. (TODO: fixa vilka fält som ska vara med)
+
+@Entity
+public class HeroResponseDto {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    int id;
+
+    private Race race;
+    private boolean focusedFire;     // Elf
+    private boolean steadyFrame;     // Dwarf
+    private boolean strongArms;      // Orc
+    private boolean jackOfAllTrades; // Human
+
+    public int getId() {
+        return id;
+    }
+
+    public HeroResponseDto setId(int id) {
+        this.id = id;
+        return this;
+    }
+
+    public Race getRace() {
+
+        return race;
+    }
+
+    public HeroResponseDto setRace(Race race) {
+        this.race = race;
+        return this;
+    }
+
+    public boolean getFocusedFire() {
+        return focusedFire;
+    }
+
+    public HeroResponseDto setFocusedFire(boolean focusedFire) {
+        this.focusedFire = focusedFire;
+        return this;
+    }
+
+    public boolean getSteadyFrame() {
+        return steadyFrame;
+    }
+
+    public HeroResponseDto setSteadyFrame(boolean steadyFrame) {
+        this.steadyFrame = steadyFrame;
+        return this;
+    }
+
+    public boolean getStrongArms() {
+        return strongArms;
+    }
+
+    public HeroResponseDto setStrongArms(boolean strongArms) {
+        this.strongArms = strongArms;
+        return this;
+    }
+
+    public boolean getJackOfAllTrades() {
+        return jackOfAllTrades;
+    }
+
+    public HeroResponseDto setJackOfAllTrades(boolean jackOfAllTrades) {
+        this.jackOfAllTrades = jackOfAllTrades;
+        return this;
+    }
+
+}

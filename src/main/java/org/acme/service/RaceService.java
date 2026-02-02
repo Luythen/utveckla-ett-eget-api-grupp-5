@@ -3,7 +3,6 @@ package org.acme.service;
 import java.util.List;
 
 import org.acme.model.Hero;
-import org.acme.model.Race;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -24,16 +23,6 @@ public class RaceService {
         return em.createQuery("SELECT r FROM Race r", Hero.class).getResultList();
     }
 
-    public void createHero(String name,
-                 String race,
-                 boolean focusedfire,
-                 boolean strongArms,
-                 boolean steadyFrame,
-                 boolean jackOfAllTrades
-                ){
-
-
-    }
-
+    
 
 }

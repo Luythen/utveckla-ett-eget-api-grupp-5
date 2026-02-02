@@ -8,7 +8,6 @@ import org.acme.service.RaceService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
@@ -33,15 +32,6 @@ public class RaceResource {
         }
 
         return Response.ok(races).build();
-    }
-
-
-    @POST
-    public Response postHero(Hero heroData){
-
-
-
-        return Response.ok().build();
     }
 
 }

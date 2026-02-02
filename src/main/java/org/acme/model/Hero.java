@@ -13,10 +13,13 @@ public class Hero {
     int id;
 
     private Race race;
-    private boolean focusedFire;     // Elf
-    private boolean steadyFrame;     // Dwarf
-    private boolean strongArms;      // Orc
-    private boolean jackOfAllTrades; // Human
+    private String name;
+    private String heroClass;
+
+    private boolean focusedFire;     // Elf specifik
+    private boolean steadyFrame;     // Dwarf specifik
+    private boolean strongArms;      // Orc specifik
+    private boolean jackOfAllTrades; // Human specifik
 
     public int getId() {
         return id;
@@ -28,7 +31,6 @@ public class Hero {
     }
 
     public Race getRace() {
-
         return race;
     }
 
@@ -70,6 +72,24 @@ public class Hero {
 
     public Hero setJackOfAllTrades(boolean jackOfAllTrades) {
         this.jackOfAllTrades = jackOfAllTrades;
+        return this;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Hero setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public String getHeroClass() {
+        return heroClass;
+    }
+
+    public Hero setHeroClass(String heroClass) {
+        this.heroClass = heroClass;
         return this;
     }
 

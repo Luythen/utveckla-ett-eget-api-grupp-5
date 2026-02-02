@@ -1,22 +1,16 @@
 package org.acme.model;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 
 // Response Data Transfer Object som skickas till frontend. 
 // Innehåller de fält som vi vill visa till klient. (TODO: fixa vilka fält som ska vara med)
 
-@Entity
 public class HeroResponseDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
-
-    private Race race;
+    private int     id;
+    private String  name;
+    private String  heroClass;
+    private Race    race;
     private boolean focusedFire;     // Elf
     private boolean steadyFrame;     // Dwarf
     private boolean strongArms;      // Orc
@@ -74,6 +68,24 @@ public class HeroResponseDto {
 
     public HeroResponseDto setJackOfAllTrades(boolean jackOfAllTrades) {
         this.jackOfAllTrades = jackOfAllTrades;
+        return this;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public HeroResponseDto setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public String getHeroClass() {
+        return heroClass;
+    }
+
+    public HeroResponseDto setHeroClass(String heroClass) {
+        this.heroClass = heroClass;
         return this;
     }
 

@@ -2,16 +2,30 @@ package org.acme.model;
 
 import java.util.List;
 
+// Enum för olika raser.
+// Innehåller rasens namn för att kunna användas som display i frontend, samt en beskrivning av rasen.
+
 public enum Race {
 
-    HUMAN   ("human"    , "Human are potent in just about anything, but they don't excel in any particular trait. Humans gain +2 to all stats, on level up."),
-    ORC     ("orc"      , "Orcs are massive, intimidating, and strong. Orcs gain +1 to all stats, and +3 to Strength, on level up."),
-    ELF     ("elf"      , "Elves are naturally agile and quick on their feet. Elves gain +1 to all stats, and +3 to Dexterity, on level up."),
-    DWARF   ("dwarf"    , "Dwarves are short, but sturdy. They know how to take a punch. Dwarves gain +1 to all stats, and +3 to Constitution, on level up.");
+    HUMAN   ("Human"    , "Human are potent in just about anything, but they don't excel in any particular trait. Humans gain +2 to all stats, on level up."),
+    ORC     ("Orc"      , "Orcs are massive, intimidating, and strong. Orcs gain +1 to all stats, and +3 to Strength, on level up."),
+    ELF     ("Elf"      , "Elves are naturally agile and quick on their feet. Elves gain +1 to all stats, and +3 to Dexterity, on level up."),
+    DWARF   ("Dwarf"    , "Dwarves are short, but sturdy. They know how to take a punch. Dwarves gain +1 to all stats, and +3 to Constitution, on level up.");
 
+    // Skapar fält för rasens namn och beskrivning
     private final String race;
     private final String flavour;
+    
+    // Konstruktor för enum
+    Race(String race, String flavour) {
+        this.race = race;
+        this.flavour = flavour;
+    }
 
+
+    // Getter för rasens namn och beskrivning
+    // Hämtas statiskt genom att skriva Race.HUMAN.getRace(), Race.ELF.getFlavour(), etc.
+    // Eller om man vill hämta flavour text från en specifik hero blir det hero.getRace().getFlavour()
     public String getRace() {
         return race;
     }
@@ -20,14 +34,14 @@ public enum Race {
         return flavour;
     }
 
-    Race(String race, String flavour) {
-        this.race = race;
-        this.flavour = flavour;
+
+    // Statisk metod för att hämta en lista med alla raser
+    // Kan användas av klient för att t.ex visa val och flavourtext vid skapande av hero
+    public static List<Race> RaceList() {
+    return List.of(Race.values());
     }
 
-    public static List<Race> RaceList() {
-        return List.of(Race.values());
-    }
+
 
     public static Race fromString(String value) {
         for (Race r : Race.values()) {
@@ -36,6 +50,7 @@ public enum Race {
             }
         }
         throw new IllegalArgumentException("Unknown attribute: " + value);
-    }
+    } 
+
 
 }

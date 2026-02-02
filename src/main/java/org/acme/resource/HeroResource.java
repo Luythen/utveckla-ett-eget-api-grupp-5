@@ -1,13 +1,17 @@
 package org.acme.resource;
 
 
-import org.acme.model.Hero;
+import java.util.List;
+
 import org.acme.model.HeroDto;
 import org.acme.model.HeroResponseDto;
 import org.acme.service.HeroService;
 
 import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -22,7 +26,11 @@ public class HeroResource {
     @Inject
     HeroService heroService;
 
+    @Inject
+    EntityManager em;
+    
     @POST
+    @Transactional
     public Response postHero(HeroDto heroDto){
 
         try {
@@ -43,5 +51,12 @@ public class HeroResource {
 
     }
 
+    @GET
+    @Path("/all")
+    public List<HeroResponseDto> getAllHeroes(){
+
+        return heroService.getAllHeroes();
+
+    }
 
 }

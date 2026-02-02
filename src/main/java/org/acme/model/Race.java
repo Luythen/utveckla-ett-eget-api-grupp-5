@@ -1,70 +1,41 @@
 package org.acme.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import java.util.List;
 
-@Entity
-public class Race {
+public enum Race {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    HUMAN   ("human"    , "Human are potent in just about anything, but they don't excel in any particular trait. Humans gain +2 to all stats, on level up."),
+    ORC     ("orc"      , "Orcs are massive, intimidating, and strong. Orcs gain +1 to all stats, and +3 to Strength, on level up."),
+    ELF     ("elf"      , "Elves are naturally agile and quick on their feet. Elves gain +1 to all stats, and +3 to Dexterity, on level up."),
+    DWARF   ("dwarf"    , "Dwarves are short, but sturdy. They know how to take a punch. Dwarves gain +1 to all stats, and +3 to Constitution, on level up.");
 
-    private String race;
-
-    private boolean focusedFire;     // Elf
-    private boolean steadyFrame;     // Dwarf
-    private boolean strongArms;      // Orc
-    private boolean jackOfAllTrades; // Human
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    private final String race;
+    private final String flavour;
 
     public String getRace() {
         return race;
     }
 
-    public void setRace(String race) {
+    public String getFlavour(){
+        return flavour;
+    }
+
+    Race(String race, String flavour) {
         this.race = race;
+        this.flavour = flavour;
     }
 
-    public boolean getFocusedFire() {
-        return focusedFire;
+    public static List<Race> RaceList() {
+        return List.of(Race.values());
     }
 
-    public void setFocusedFire(boolean focusedFire) {
-        this.focusedFire = focusedFire;
-    }
-
-    public boolean getSteadyFrame() {
-        return steadyFrame;
-    }
-
-    public void setSteadyFrame(boolean steadyFrame) {
-        this.steadyFrame = steadyFrame;
-    }
-
-    public boolean getStrongArms() {
-        return strongArms;
-    }
-
-    public void setStrongArms(boolean strongArms) {
-        this.strongArms = strongArms;
-    }
-
-    public boolean getJackOfAllTrades() {
-        return jackOfAllTrades;
-    }
-
-    public void setJackOfAllTrades(boolean jackOfAllTrades) {
-        this.jackOfAllTrades = jackOfAllTrades;
+    public static Race fromString(String value) {
+        for (Race r : Race.values()) {
+            if (r.race.equalsIgnoreCase(value)) {
+                return r;
+            }
+        }
+        throw new IllegalArgumentException("Unknown attribute: " + value);
     }
 
 }

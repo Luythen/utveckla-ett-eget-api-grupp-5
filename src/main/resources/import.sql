@@ -6,3 +6,6 @@
 -- alter sequence myentity_seq restart with 4;
 
 insert into race ( race, focusedFire, steadyFrame, strongArms, jackOfAllTrades) values ( 'Human', 'false', 'false', 'false', 'true');
+insert into race ( race, focusedFire, steadyFrame, strongArms, jackOfAllTrades) values ( 'Elf', 'true', 'false', 'false', 'false');
+insert into race ( race, focusedFire, steadyFrame, strongArms, jackOfAllTrades) values ( 'Dwarf', 'false', 'true', 'false', 'false');
+insert into race ( race, focusedFire, steadyFrame, strongArms, jackOfAllTrades) values ( 'Human', 'false', 'false', 'true', 'false');

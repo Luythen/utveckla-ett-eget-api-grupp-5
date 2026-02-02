@@ -2,7 +2,7 @@ package org.acme.resource;
 
 import java.util.List;
 
-import org.acme.model.Race;
+import org.acme.model.Hero;
 import org.acme.service.RaceService;
 
 import jakarta.inject.Inject;
@@ -26,7 +26,7 @@ public class RaceResource {
     @Path("/all")
     public Response getRaces() {
 
-        List<Race> races = raceService.findAll();
+        List<Hero> races = raceService.findAll();
         
         if (races.isEmpty()){
             return Response.noContent().build();
@@ -37,7 +37,10 @@ public class RaceResource {
 
 
     @POST
-    public Response PostRace(){
+    public Response postHero(Hero heroData){
+
+
+
         return Response.ok().build();
     }
 

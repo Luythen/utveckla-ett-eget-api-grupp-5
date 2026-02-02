@@ -2,6 +2,7 @@ package org.acme.service;
 
 import java.util.List;
 
+import org.acme.model.Hero;
 import org.acme.model.Race;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,8 +20,19 @@ public class RaceService {
     EntityManager em;
 
     
-    public List<Race> findAll() {
-        return em.createQuery("SELECT r FROM Race r", Race.class).getResultList();
+    public List<Hero> findAll() {
+        return em.createQuery("SELECT r FROM Race r", Hero.class).getResultList();
+    }
+
+    public void createHero(String name,
+                 String race,
+                 boolean focusedfire,
+                 boolean strongArms,
+                 boolean steadyFrame,
+                 boolean jackOfAllTrades
+                ){
+
+
     }
 
 

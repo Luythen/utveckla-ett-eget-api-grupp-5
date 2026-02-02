@@ -1,28 +1,38 @@
 package org.acme.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.acme.model.Hero;
+import org.acme.model.Race;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 
-@Transactional(Transactional.TxType.SUPPORTS)
 @ApplicationScoped
-@Named
 public class RaceService {
+     
+// Exporterar ras-enums som en lista av maps, för att kunna användas i klienten
+// för display av rasval och beskrivningar
+// Användning för att visa data i klienten:
+// raceList[0].name    (Skulle visa enum namnet HUMAN)
+// raceList[0].displayName  (Skulle visa display namnet "Human")
+// raceList[0].flavour (Skulle visa flavor text för rasen Human)
+// etc.
 
-    @Inject
-    EntityManager em;
+public List<Map<String, String>> getAllRaces() {
 
-    
-    public List<Hero> findAll() {
-        return em.createQuery("SELECT r FROM Race r", Hero.class).getResultList();
+    List<Map<String, String>> raceList = new ArrayList<>();
+
+    for (Race r : Race.values()) {
+        Map<String, String> raceMap = new HashMap<>();
+        raceMap.put("name", r.name());
+        raceMap.put("displayName", r.getRace());
+        raceMap.put("flavour", r.getFlavour());
+        raceList.add(raceMap);
     }
 
-    
+    return raceList;
+}
 
 }

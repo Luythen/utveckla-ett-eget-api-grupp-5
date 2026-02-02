@@ -1,6 +1,8 @@
 package org.acme.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -12,7 +14,10 @@ public class Hero {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
+    // utan den här försöker programmet lagra enumens värde som ett index (0,1,2,3) i databasen
+    @Enumerated(EnumType.STRING)
     private Race race;
+    
     private String name;
     private String heroClass;
 

@@ -1,8 +1,5 @@
 package org.acme.resource;
 
-import java.util.List;
-
-import org.acme.model.Hero;
 import org.acme.service.RaceService;
 
 import jakarta.inject.Inject;
@@ -24,14 +21,7 @@ public class RaceResource {
     @GET
     @Path("/all")
     public Response getRaces() {
-
-        List<Hero> races = raceService.findAll();
-        
-        if (races.isEmpty()){
-            return Response.noContent().build();
-        }
-
-        return Response.ok(races).build();
+        return Response.ok(raceService.getAllRaces()).build();
     }
 
 }

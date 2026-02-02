@@ -22,10 +22,12 @@ public enum Race {
         this.flavour = flavour;
     }
 
-
     // Getter för rasens namn och beskrivning
     // Hämtas statiskt genom att skriva Race.HUMAN.getRace(), Race.ELF.getFlavour(), etc.
     // Eller om man vill hämta flavour text från en specifik hero blir det hero.getRace().getFlavour()
+    // Vill man printa namnet på rasen blir det hero.getRace().getRace() 
+    // (lite konstigt namnval kanske, men enkelt att komma ihåg)
+    // TODO: byt namn?
     public String getRace() {
         return race;
     }
@@ -34,23 +36,21 @@ public enum Race {
         return flavour;
     }
 
-
     // Statisk metod för att hämta en lista med alla raser
     // Kan användas av klient för att t.ex visa val och flavourtext vid skapande av hero
-    public static List<Race> RaceList() {
+    public static List<Race> raceList() {
     return List.of(Race.values());
     }
 
-
-
-    public static Race fromString(String value) {
-        for (Race r : Race.values()) {
-            if (r.race.equalsIgnoreCase(value)) {
-                return r;
+    // Den här metoden konverterar en sträng till motsvarande enum värde
+    // Används för att validera inkommande ras från klient vid skapande av hero
+    public static Race fromString(String value) {   // in värde i form av sträng
+        for (Race r : Race.values()) {              // loopa igenom alla enum värden
+            if (r.race.equalsIgnoreCase(value)) {   // om strängen matchar enum värdets namn
+                return r;                           // returneras motsvarande enum värde
             }
         }
         throw new IllegalArgumentException("Unknown attribute: " + value);
     } 
-
 
 }

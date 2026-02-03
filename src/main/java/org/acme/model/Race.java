@@ -1,70 +1,56 @@
 package org.acme.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import java.util.List;
 
-@Entity
-public class Race {
+// Enum för olika raser.
+// Innehåller rasens namn för att kunna användas som display i frontend, samt en beskrivning av rasen.
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+public enum Race {
 
-    private String race;
+    HUMAN   ("Human"    , "Human are potent in just about anything, but they don't excel in any particular trait. Humans gain +2 to all stats, on level up."),
+    ORC     ("Orc"      , "Orcs are massive, intimidating, and strong. Orcs gain +1 to all stats, and +3 to Strength, on level up."),
+    ELF     ("Elf"      , "Elves are naturally agile and quick on their feet. Elves gain +1 to all stats, and +3 to Dexterity, on level up."),
+    DWARF   ("Dwarf"    , "Dwarves are short, but sturdy. They know how to take a punch. Dwarves gain +1 to all stats, and +3 to Constitution, on level up.");
 
-    private boolean focusedFire;     // Elf
-    private boolean steadyFrame;     // Dwarf
-    private boolean strongArms;      // Orc
-    private boolean jackOfAllTrades; // Human
-
-    public int getId() {
-        return id;
+    // Skapar fält för rasens namn och beskrivning
+    private final String race;
+    private final String flavour;
+    
+    // Konstruktor för enum
+    Race(String race, String flavour) {
+        this.race = race;
+        this.flavour = flavour;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
+    // Getter för rasens namn och beskrivning
+    // Hämtas statiskt genom att skriva Race.HUMAN.getRace(), Race.ELF.getFlavour(), etc.
+    // Eller om man vill hämta flavour text från en specifik hero blir det hero.getRace().getFlavour()
+    // Vill man printa namnet på rasen blir det hero.getRace().getRace() 
+    // (lite konstigt namnval kanske, men enkelt att komma ihåg)
+    // TODO: byt namn?
     public String getRace() {
         return race;
     }
 
-    public void setRace(String race) {
-        this.race = race;
+    public String getFlavour(){
+        return flavour;
     }
 
-    public boolean getFocusedFire() {
-        return focusedFire;
+    // Statisk metod för att hämta en lista med alla raser
+    // Kan användas av klient för att t.ex visa val och flavourtext vid skapande av hero
+    public static List<Race> raceList() {
+    return List.of(Race.values());
     }
 
-    public void setFocusedFire(boolean focusedFire) {
-        this.focusedFire = focusedFire;
-    }
-
-    public boolean getSteadyFrame() {
-        return steadyFrame;
-    }
-
-    public void setSteadyFrame(boolean steadyFrame) {
-        this.steadyFrame = steadyFrame;
-    }
-
-    public boolean getStrongArms() {
-        return strongArms;
-    }
-
-    public void setStrongArms(boolean strongArms) {
-        this.strongArms = strongArms;
-    }
-
-    public boolean getJackOfAllTrades() {
-        return jackOfAllTrades;
-    }
-
-    public void setJackOfAllTrades(boolean jackOfAllTrades) {
-        this.jackOfAllTrades = jackOfAllTrades;
-    }
+    // Den här metoden konverterar en sträng till motsvarande enum värde
+    // Används för att validera inkommande ras från klient vid skapande av hero
+    public static Race fromString(String value) {   // in värde i form av sträng
+        for (Race r : Race.values()) {              // loopa igenom alla enum värden
+            if (r.race.equalsIgnoreCase(value)) {   // om strängen matchar enum värdets namn
+                return r;                           // returneras motsvarande enum värde
+            }
+        }
+        throw new IllegalArgumentException("Unknown attribute: " + value);
+    } 
 
 }

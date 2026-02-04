@@ -7,13 +7,15 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.Produces;
 
 
-@Path("/api/public")
+@PermitAll // Alla har tillgång till denna klassen
+@Path("/api/public") 
 public class PublicResource {
 
+
+
     @GET
-    @PermitAll
     @Produces(MediaType.TEXT_PLAIN)
-    public String publicResource(){
+        public String publicResource(){
         return "public";
     }
 

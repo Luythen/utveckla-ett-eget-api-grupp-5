@@ -2,8 +2,8 @@ package org.acme.model;
 
 public class UserResponseDto {
 
-    public String username;
-    public String apiKey;
+    private String username;
+    private String apiKey;
 
     public UserResponseDto(){
     }

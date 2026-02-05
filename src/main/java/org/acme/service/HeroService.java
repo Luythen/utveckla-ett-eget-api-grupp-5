@@ -12,7 +12,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.NoResultException;
 
 
 /* ========================================================= */
@@ -126,8 +125,43 @@ public class HeroService {
         }
         return heroResponseDtos;
     }
+    //Uppdaterar en hero baserat på id
+    public HeroResponseDto updateHero(int id, HeroDto heroDto) {
 
+        //hämtar hero från databasen med id
+        Hero hero = em.find(Hero.class, id);
 
+        //Om Hero inte finns, returnerar null
+        if (hero == null){
+            return null; 
+        }
 
+        // Konvertera string till enum
+        Race enumifiedRace = normalizeRace(heroDto.getRace());
 
+        //Uppdatera alla fält med nya värden
+        hero.setName                (heroDto.getName())
+            .setHeroClass           (heroDto.getHeroClass())
+            .setRace                (enumifiedRace)
+            .setFocusedFire         (isElf(enumifiedRace))
+            .setSteadyFrame         (isDwarf(enumifiedRace))
+            .setStrongArms          (isOrc(enumifiedRace))
+            .setJackOfAllTrades     (isHuman(enumifiedRace));
+
+        //sparar ändringar i databasen
+        em.merge(hero);
+
+        // Returnera den uppdaterade hjälten som en DTO
+        return new HeroResponseDto()
+            .setId              (hero.getId())
+            .setName            (hero.getName())
+            .setHeroClass       (hero.getHeroClass())
+            .setRace            (hero.getRace())
+            .setFocusedFire     (hero.getFocusedFire())
+            .setSteadyFrame     (hero.getSteadyFrame())
+            .setStrongArms      (hero.getStrongArms())
+            .setJackOfAllTrades (hero.getJackOfAllTrades());
+    }
+
+    
 }

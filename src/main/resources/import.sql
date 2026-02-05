@@ -10,3 +10,14 @@ insert into hero (name, heroClass, race, focusedFire, steadyFrame, strongArms, j
 insert into hero (name, heroClass, race, focusedFire, steadyFrame, strongArms, jackOfAllTrades) values ('Gronk' , 'Vanguard'  , 'DWARF' , false , true  , false , false);
 insert into hero (name, heroClass, race, focusedFire, steadyFrame, strongArms, jackOfAllTrades) values ('Nark'  , 'Barbarian' , 'ORC'   , false , false , true  , false);
 
+
+-- Lägger till en enda test-user. Vi behöver inte testa lösenord och sådant längre, så det är irrelevant
+-- om det är okrypterat eller ej. Det enda som spelar någon roll är att den har en key som vi kan använda
+-- för att testa filtret.
+-- För att skicka en request i postman:
+-- välj 'Auth'
+-- välj 'Auth type: API Key
+-- ställ in:
+-- Key: X-API-KEY
+-- Value: <nyckeln>
+insert into users (id, username, password, api_key, role) values (111, 'asdf', 'asdf', '123456', 'user');

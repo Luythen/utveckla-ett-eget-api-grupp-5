@@ -1,3 +1,12 @@
+/* 
+* Känner att vi inte behöver lägga jättemycket dokumentation här.
+* Det är ju precis det vi jobbat med tidigare.
+* Två funktioner som
+* 1: Gör en fetch mot api/users/new-user endpoint för att skapa en ny användare. 
+    Den skickar in data i form av JSON som förväntas vara ett UserDto objekt i backend.
+* 2: Gör en fetch mot api/users/get-key endpoint för att hämta en api nyckel knuten till 
+    användarkontot som skickats in. Samma princip här. Returnerar en api nyckel (UUID) i form av plain text.
+*/
 
 const regBtn = document.getElementById("regBtn");
 const getKeyBtn = document.getElementById("getKeyBtn");
@@ -11,6 +20,7 @@ if (regBtn) {
         const response = await fetch("http://localhost:8080/api/users/new-user", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
+            credentials: "include",
             body: JSON.stringify({ username, password })
         });
 
@@ -19,6 +29,7 @@ if (regBtn) {
     });
 }
 
+// Hämtning av api nyckel
 if (getKeyBtn) {
     getKeyBtn.addEventListener("click", async () => {
         const username = document.getElementById("usernameForKey").value;

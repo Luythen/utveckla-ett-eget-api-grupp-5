@@ -56,7 +56,7 @@ public class UserResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/get-key")
-    public Response loginUser(UserDto userDto){
+    public Response getKey(UserDto userDto){
         try {
             String apiKey = userService.fetchApiKey(userDto.getUsername(), userDto.getPassword());
             return Response.ok(apiKey).build();

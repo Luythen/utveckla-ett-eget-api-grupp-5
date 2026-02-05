@@ -10,6 +10,8 @@ import org.acme.service.HeroService;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.PATCH;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -60,5 +62,27 @@ public class HeroResource {
         return heroService.getAllHeroes();
 
     }
+
+    //Uppdaterar en hero baserat på id
+    @PATCH
+    @Path("/{id}")
+    @Transactional
+    public Response updateHero(@PathParam("id") int id, HeroDto heroDto){
+
+        //Anropa service för att uppdatera hero
+        HeroResponseDto hero = heroService.updateHero(id, heroDto);
+
+        // Om hero inte finns, returnera 404
+        if (hero == null){
+            return Response
+                .status(Response.Status.NOT_FOUND)
+                .entity("Hero not found")
+                .build();
+        }
+
+        //Returnera uppdaterad hero
+        return Response.ok(hero).build();
+    }
+
 
 }

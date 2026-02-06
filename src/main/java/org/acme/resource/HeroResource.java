@@ -222,6 +222,28 @@ public class HeroResource {
         }
     }
 
+    @POST
+    @Transactional
+    @Path("/get-hero-by-id/{id}")
+    public Response getHeroById(@PathParam("id") int id){
+
+        try {
+            return Response
+            .ok(heroService
+                .getHeroResponseById(id))
+            .build();
+
+        } catch (NotFoundException e) {
+
+            return Response
+            .status(Response.Status.NOT_FOUND)
+            .entity(e.getMessage())
+            .build();
+        }
+
+
+    }
+
     // Raderar en hero baserat på id
     @DELETE
     @APIResponse(

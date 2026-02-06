@@ -210,10 +210,19 @@ public class HeroService {
         }
     }
 
+    public Hero getHeroById(int id) throws NotFoundException {
+        return em.find(Hero.class, id);
+    }
+
+    public HeroResponseDto getHeroResponseById(int id) throws NotFoundException{
+        Hero hero = getHeroById(id);
+        return createHeroResponseDto(hero);
+    }
+
     // Raderar en hero baserat på id
     public boolean deleteHero(int id) throws AccessDeniedException {
 
-        Hero hero = em.find(Hero.class, id);
+        Hero hero = getHeroById(id);
 
         // Om hero inte finns, returnera false
         if (hero == null) {

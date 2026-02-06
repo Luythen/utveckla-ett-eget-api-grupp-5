@@ -224,13 +224,27 @@ public class HeroResource {
 
     @POST
     @Transactional
+    @Path("/get-hero-by-weapon/{weapon}")
+    public Response getHeroesByWeapon(@PathParam("weapon") String weapon) {
+
+        try {
+            return Response
+            .ok(heroService.getHeroesByWeapon(weapon))
+            .build();
+        } catch (NotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage())
+                    .build();
+        }
+    }
+
+    @POST
+    @Transactional
     @Path("/get-hero-by-id/{id}")
     public Response getHeroById(@PathParam("id") int id){
 
         try {
             return Response
-            .ok(heroService
-                .getHeroResponseById(id))
+            .ok(heroService.getHeroResponseById(id))
             .build();
 
         } catch (NotFoundException e) {

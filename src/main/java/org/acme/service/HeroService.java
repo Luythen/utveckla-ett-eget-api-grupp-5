@@ -219,6 +219,29 @@ public class HeroService {
         return createHeroResponseDto(hero);
     }
 
+    public List<HeroResponseDto> getHeroesByWeapon(String weapon) throws NotFoundException {
+       
+        Weapon weaponToEnum = Weapon.fromString(weapon);
+
+        List<Hero> heroes = em.createQuery("SELECT h FROM Hero h WHERE h.weapon = :weapon", Hero.class)
+        .setParameter("weapon", weaponToEnum)
+        .getResultList();
+
+        List<HeroResponseDto> responseHeroes = new ArrayList<>();
+
+        for (Hero h : heroes) {
+            if (h.getWeapon().equals(weaponToEnum)) {
+                responseHeroes.add(createHeroResponseDto(h));
+            }
+        }
+
+        if (responseHeroes.isEmpty()) {
+            throw new NotFoundException("There are no heroes using " + weapon);
+        }
+
+        return responseHeroes;
+    }
+
     // Raderar en hero baserat på id
     public boolean deleteHero(int id) throws AccessDeniedException {
 

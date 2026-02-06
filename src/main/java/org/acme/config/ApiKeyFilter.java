@@ -59,7 +59,7 @@ public class ApiKeyFilter implements ContainerRequestFilter {
         String path = requestContext.getUriInfo().getPath(); // Hämtar den inkommande requestens path
 
         // Låt alla requests till /api/users passera utan API key kontroll
-        if (path.startsWith("/api/users")) {
+        if (path.startsWith("/api/users") || path.startsWith("/api/hero/get-all-heroes")) {
             return;
         }
 

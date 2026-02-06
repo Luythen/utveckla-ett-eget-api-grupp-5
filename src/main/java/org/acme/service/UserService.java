@@ -36,8 +36,7 @@ public class UserService {
         User user = new User()
                 .setUsername(userDto.getUsername())
                 .setPassword(BcryptUtil.bcryptHash(userDto.getPassword()))
-                .setApiKey(UUID.randomUUID().toString())
-                .setRole("user");
+                .setApiKey(UUID.randomUUID().toString());
 
         user.persist();
     }

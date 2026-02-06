@@ -111,9 +111,15 @@ public class HeroResource {
     responseCode = "JAVASCRIPT EXAMPLE",
     description = SwaggerDocs.HERO_FETCH_ALL_HEROES_JAVASCRIPT_STRING
 )
-    @Path("/get-all-heroes")
-    public List<HeroResponseDto> getHeroes(){
+    @Path("/get-user-heroes")
+    public List<HeroResponseDto> getUserHeroes(){
         return heroService.getHeroes();
+    }
+
+    @GET
+    @Path("/get-all-heroes")
+    public List<HeroResponseDto> getAllHeroes(){
+        return heroService.getAllHeroesResponse();
     }
 
     @POST

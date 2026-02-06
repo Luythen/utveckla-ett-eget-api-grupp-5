@@ -20,4 +20,4 @@ insert into hero (name, heroClass, race, weapon, focusedFire, steadyFrame, stron
 -- ställ in:
 -- Key: X-API-KEY
 -- Value: <nyckeln>
-insert into users (id, username, password, api_key, role) values (111, 'asdf', 'asdf', '123456', 'user');
+insert into users (id, username, password, api_key) values (111, 'asdf', 'asdf', '123456');

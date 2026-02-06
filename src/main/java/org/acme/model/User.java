@@ -14,7 +14,6 @@ public class User extends PanacheEntity {
 
     private String password;
     
-    private String role;
 
     @Column(name = "api_key", nullable = false, unique = true)
     private String apiKey;    
@@ -48,14 +47,5 @@ public class User extends PanacheEntity {
         return this;
     }
 
-   
-    public String getRole() {
-        return role;
-    }
-
-    public User setRole(String role) {
-        this.role = role;
-        return this;
-    }
     
 }

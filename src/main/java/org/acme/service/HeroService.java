@@ -135,6 +135,15 @@ public class HeroService {
         
     }
 
+    public List<HeroResponseDto> getAllHeroesResponse() {
+        List<HeroResponseDto> allHeroesAsResponse = new ArrayList<>();
+        for (Hero h : getAllHeroes()) {
+            allHeroesAsResponse.add(createHeroResponseDto(h));
+        }
+        return allHeroesAsResponse;
+
+    }
+
     public List<HeroResponseDto> getHeroes() {
 
         List<Hero> heroes = getAllHeroes();

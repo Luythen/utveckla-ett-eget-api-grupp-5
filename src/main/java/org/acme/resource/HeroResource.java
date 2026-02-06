@@ -131,6 +131,22 @@ public class HeroResource {
     @Transactional
     public Response updateHero(HeroDto heroDto){
 
+        // kontrollera att data har skickats. 
+        if (heroDto == null) {
+            return Response
+                .status(Response.Status.BAD_REQUEST)
+                .entity("No hero data provided")
+                .build();
+        }
+
+        // Kontrollera att namn finns.
+        if (heroDto.getName() == null || heroDto.getName().isEmpty()) {
+            return Response
+                .status(Response.Status.BAD_REQUEST)
+                .entity("Hero name is required")
+                .build();
+        }
+
         //Anropa service för att uppdatera hero
         HeroResponseDto hero = heroService.updateHero(heroDto);
 
@@ -151,6 +167,7 @@ public class HeroResource {
     @Path("/{id}")
     @Transactional
     public Response deleteHero(@PathParam("id") int id){
+        
     
     boolean deleted = heroService.deleteHero(id);
     

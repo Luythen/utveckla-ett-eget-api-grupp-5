@@ -48,7 +48,7 @@ public class HeroResource {
     @POST
     @Transactional
     @Operation(summary = "Creates a new hero", description = "Creates a new hero in the system, check Example Value for structure.")
-   @APIResponse(
+    @APIResponse(
     responseCode = "200", description = SwaggerDocs.CREATE_NEW_HERO_STRING)
     @Path("/new-hero")
     public Response newHero(HeroDto heroDto){
@@ -140,16 +140,16 @@ public class HeroResource {
                     .build();
         }
     }
-
-    @POST
-    @Consumes(MediaType.TEXT_PLAIN)
+    
+    @GET
     @APIResponse(
     responseCode = "JAVASCRIPT EXAMPLE",
-    description = SwaggerDocs.HERO_FETCH_HERO_BY_NAME_JAVASCRIPT_STRING)
-    @Path("/get-hero-by-name")
-    public Response getHeroByName(String heroName){
+    description = SwaggerDocs.HERO_FETCH_HERO_BY_NAME_JAVASCRIPT_STRING) 
+    @Path("/get-hero-by-name/{heroName}")
+    public Response getHeroByName(@PathParam("heroName") String heroName){
 
         // Kontrollera om hero namn blev skrivet
+
         if (heroName == null || heroName.isEmpty()) {
             return Response
                 .status(Response.Status.BAD_REQUEST)
@@ -158,7 +158,7 @@ public class HeroResource {
         }
 
         try {
-            HeroResponseDto responseDto =  heroService.getHeroByName(heroName);
+            HeroResponseDto responseDto = heroService.getHeroByName(heroName);
             return Response.ok(responseDto).build();
         } catch (IllegalArgumentException e) {
             return Response
@@ -222,8 +222,9 @@ public class HeroResource {
         }
     }
 
-    @POST
-    @Transactional
+ 
+
+    @GET
     @Path("/get-hero-by-weapon/{weapon}")
     public Response getHeroesByWeapon(@PathParam("weapon") String weapon) {
 
@@ -237,8 +238,7 @@ public class HeroResource {
         }
     }
 
-    @POST
-    @Transactional
+    @GET
     @Path("/get-hero-by-id/{id}")
     public Response getHeroById(@PathParam("id") int id){
 

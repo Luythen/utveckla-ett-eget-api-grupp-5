@@ -264,7 +264,7 @@ public class HeroService {
     public HeroResponseDto getHeroByName(String name) throws NoResultException, AccessDeniedException {
 
         try {
-            Hero hero = em.createQuery("SELECT h FROM Hero h WHERE h.name = :name", Hero.class)
+            Hero hero = em.createQuery("SELECT h FROM Hero h WHERE LOWER(h.name) = LOWER(:name)", Hero.class)
                     .setParameter("name", name)
                     .getSingleResult();
 

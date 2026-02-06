@@ -279,6 +279,36 @@ public class HeroService {
 
     }
 
+    public List<HeroResponseDto> getHeroesByRace(String race) throws NotFoundException {
+    
+        Race raceEnum;
+
+        try {
+            raceEnum = Race.fromString(race);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("No such race exists");
+        }
+        
+        
+    
+
+        List<Hero> heroes = em.createQuery("SELECT h FROM Hero h WHERE h.race = :raceEnum", Hero.class)
+                .setParameter("raceEnum", raceEnum)
+                .getResultList();
+        List<HeroResponseDto> responseHeroes = new ArrayList<>();
+        for (Hero h : heroes) {
+            if (h.getRace().equals(raceEnum)) {
+                responseHeroes.add(createHeroResponseDto(h));
+            }
+        }
+
+        if (responseHeroes.isEmpty()) {
+            throw new NotFoundException("No heroes with that race exist.");
+        }
+
+        return responseHeroes;
+    }
+
     public List<HeroResponseDto> getHeroesByClass(String heroClass) throws NotFoundException {
         HeroClass heroClassEnum = HeroClass.fromString(heroClass);
         

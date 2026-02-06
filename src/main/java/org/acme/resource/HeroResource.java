@@ -145,8 +145,8 @@ public class HeroResource {
     @APIResponse(
     responseCode = "JAVASCRIPT EXAMPLE",
     description = SwaggerDocs.HERO_FETCH_HERO_BY_NAME_JAVASCRIPT_STRING) 
-    @Path("/get-hero-by-name/{heroName}")
-    public Response getHeroByName(@PathParam("heroName") String heroName){
+    @Path("/get-heroes-by-name/{heroName}")
+    public Response getHeroesByName(@PathParam("heroName") String heroName){
 
         // Kontrollera om hero namn blev skrivet
 
@@ -171,6 +171,27 @@ public class HeroResource {
                 .entity(e.getMessage())
                 .build();
         }
+    }
+
+    @GET
+    @Path("/get-heroes-by-race/{race}")
+    public Response getHeroesByRace(@PathParam("race") String race){
+        try {
+            return Response
+                    .ok(heroService.getHeroesByRace(race))
+                    .build();
+        } catch (NotFoundException e) {
+            return Response
+                    .status(Response.Status.NOT_FOUND)
+                    .entity(e.getMessage())
+                    .build();
+        } catch (IllegalArgumentException e) {
+            return Response
+                    .status(Response.Status.NOT_FOUND)
+                    .entity(e.getMessage())
+                    .build();
+        }
+
     }
 
     // Uppdaterar en hero baserat på id
@@ -296,18 +317,18 @@ public class HeroResource {
     // det går att byta ut MAGE mot någon av de andra klasserna: WARRIOR, ROGUE, PALADIN
     // för att visa hjältar av den klassen istället.
     
-@GET
-@Path("/get-hero-by-class/{heroClass}")
-public Response getHeroesByClass(@PathParam("heroClass") String heroClass){
+    @GET
+    @Path("/get-hero-by-class/{heroClass}")
+    public Response getHeroesByClass(@PathParam("heroClass") String heroClass) {
 
-    
         try {
             return Response.ok(heroService.getHeroesByClass(heroClass)).build();
         } catch (NotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-}
+    }
+
 }
 
 

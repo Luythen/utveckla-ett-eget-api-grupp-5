@@ -5,7 +5,7 @@
 -- insert into myentity (id, field) values(3, 'field-3');
 -- alter sequence myentity_seq restart with 4;
 
-insert into hero (name, heroClass, race, weapon, focusedFire, steadyFrame, strongArms, jackOfAllTrades, ownerApiKey) values ('Jayce' , 'WARRIOR' , 'HUMAN' , 'SWORD', false , false , false , true , 12345);
+insert into hero (name, heroClass, race, weapon, focusedFire, steadyFrame, strongArms, jackOfAllTrades, ownerApiKey) values ('Jayce' , 'WARRIOR' , 'HUMAN' , 'SWORD', false , false , false , true , 123456);
 insert into hero (name, heroClass, race, weapon, focusedFire, steadyFrame, strongArms, jackOfAllTrades, ownerApiKey) values ('Sammy' , 'ROGUE'   , 'ELF'   , 'SWORD', true  , false , false , false, 1234);
 insert into hero (name, heroClass, race, weapon, focusedFire, steadyFrame, strongArms, jackOfAllTrades, ownerApiKey) values ('Gronk' , 'PALADIN' , 'DWARF' , 'SWORD', false , true  , false , false, 1234567);
 insert into hero (name, heroClass, race, weapon, focusedFire, steadyFrame, strongArms, jackOfAllTrades, ownerApiKey) values ('Nark'  , 'MAGE'    , 'ORC'   , 'SWORD', false , false , true  , false, 123456);

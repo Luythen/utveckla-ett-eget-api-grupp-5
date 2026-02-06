@@ -135,26 +135,35 @@ public class HeroService {
         
     }
 
-    public List<HeroResponseDto> getAllHeroesResponse() {
+    public List<HeroResponseDto> getAllHeroesResponse() throws NoResultException {
         List<HeroResponseDto> allHeroesAsResponse = new ArrayList<>();
         for (Hero h : getAllHeroes()) {
             allHeroesAsResponse.add(createHeroResponseDto(h));
         }
+
+        if (allHeroesAsResponse.isEmpty()) {
+            throw new NoResultException("No heroes to list. :(");
+        }
+
         return allHeroesAsResponse;
 
     }
 
-    public List<HeroResponseDto> getHeroes() {
+    public List<HeroResponseDto> getHeroes() throws NoResultException {
 
         List<Hero> heroes = getAllHeroes();
-    
+
         List<HeroResponseDto> heroResponseDtos = new ArrayList<>();
 
         for (Hero h : heroes) {
             if (h.getOwnerApiKey().equals(apiKeyFilter.getCurrentUserApi())) {
                 HeroResponseDto heroResponseDto = createHeroResponseDto(h);
-                heroResponseDtos.add(heroResponseDto);        
+                heroResponseDtos.add(heroResponseDto);
             }
+        }
+
+        if (heroResponseDtos.isEmpty()) {
+            throw new NoResultException("No heroes to list. :(");
         }
 
         return heroResponseDtos;
@@ -238,8 +247,9 @@ public class HeroService {
 
     }
 
-    public List<HeroResponseDto> getHeroesByClass(String heroClass) {
+    public List<HeroResponseDto> getHeroesByClass(String heroClass) throws NotFoundException {
         HeroClass heroClassEnum = HeroClass.fromString(heroClass);
+        
         List<Hero> heroes = em.createQuery("SELECT h FROM Hero h WHERE h.heroClass = :heroClass", Hero.class)
                 .setParameter("heroClass", heroClassEnum)
                 .getResultList();
@@ -251,7 +261,9 @@ public class HeroService {
                 HeroResponseDto heroResponseDto = createHeroResponseDto(hero);
                 heroResponseDtos.add(heroResponseDto);
             }
-
+        }
+        if (heroResponseDtos.isEmpty()) {
+            throw new NotFoundException("There are no heroes with that class.");
         }
         return heroResponseDtos;
     }

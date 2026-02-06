@@ -4,6 +4,8 @@ package org.acme.resource;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
 
+import javax.naming.NameNotFoundException;
+
 import org.acme.SwaggerMessages.SwaggerDocs;
 import org.acme.config.ApiKeyFilter;
 import org.acme.model.HeroDto;
@@ -14,12 +16,14 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -112,14 +116,29 @@ public class HeroResource {
     description = SwaggerDocs.HERO_FETCH_ALL_HEROES_JAVASCRIPT_STRING
 )
     @Path("/get-user-heroes")
-    public List<HeroResponseDto> getUserHeroes(){
-        return heroService.getHeroes();
+    public Response getUserHeroes() {
+        try {
+            return Response.ok(heroService.getHeroes()).build();
+        } catch (NoResultException e) {
+            return Response
+                    .status(Response.Status.NOT_FOUND)
+                    .entity(e.getMessage())
+                    .build();
+        }
     }
 
     @GET
     @Path("/get-all-heroes")
-    public List<HeroResponseDto> getAllHeroes(){
-        return heroService.getAllHeroesResponse();
+    public Response getAllHeroes() {
+
+        try {
+            return Response.ok(heroService.getAllHeroesResponse()).build();
+        } catch (NoResultException e) {
+            return Response
+                    .status(Response.Status.NOT_FOUND)
+                    .entity(e.getMessage())
+                    .build();
+        }
     }
 
     @POST
@@ -225,11 +244,12 @@ public class HeroResource {
             }
 
             // Om hero har tagits bort, returnera 204 No Content
-            return Response.noContent().build();
+            return Response.ok("Hero has been removed.").build();
 
         } catch (AccessDeniedException e) {
 
-            return Response.status(Response.Status.BAD_REQUEST)
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
                     .entity(e.getMessage())
                     .build();
         }
@@ -242,9 +262,14 @@ public class HeroResource {
     
 @GET
 @Path("/get-hero-by-class/{heroClass}")
-public List<HeroResponseDto> getHeroesByClass(@PathParam("heroClass") String heroClass){
+public Response getHeroesByClass(@PathParam("heroClass") String heroClass){
 
-    return heroService.getHeroesByClass(heroClass);
+    
+        try {
+            return Response.ok(heroService.getHeroesByClass(heroClass)).build();
+        } catch (NotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
 
 }
 }

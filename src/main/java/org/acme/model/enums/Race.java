@@ -5,6 +5,7 @@ import java.util.List;
 // Enum för olika raser.
 // Innehåller rasens namn för att kunna användas som display i frontend, samt en beskrivning av rasen.
 
+@SuppressWarnings("null")
 public enum Race {
 
     HUMAN   ("Human"    , "Human are potent in just about anything, but they don't excel in any particular trait."),

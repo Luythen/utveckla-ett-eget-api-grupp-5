@@ -24,6 +24,7 @@ import jakarta.ws.rs.NotFoundException;
 /* Den här klassen hanterar alla hero-relaterade operationer */
 /* ========================================================= */
 
+@SuppressWarnings("null")
 @ApplicationScoped
 @Named
 public class HeroService {
@@ -204,9 +205,8 @@ public class HeroService {
             // Returnera den uppdaterade hjälten som en DTO
             return createHeroResponseDto(hero);
 
-        } catch(NotFoundException e) {
-
-            throw new NotFoundException("No hero with that ID could be found.");
+        } catch(NoResultException e) {
+            throw new NoResultException("No hero with that name could be found.");
         }
     }
 
@@ -243,13 +243,13 @@ public class HeroService {
     }
 
     // Raderar en hero baserat på id
-    public boolean deleteHero(int id) throws AccessDeniedException {
+    public boolean deleteHero(int id) throws AccessDeniedException, NotFoundException {
 
         Hero hero = getHeroById(id);
 
         // Om hero inte finns, returnera false
         if (hero == null) {
-            return false;
+            throw new NotFoundException("Hero not found.");
         }
 
         if (!hero.getOwnerApiKey().equals(apiKeyFilter.getCurrentUserApi())) {

@@ -1,6 +1,5 @@
 package org.acme.resource;
 
-
 import org.acme.model.User;
 import org.acme.model.UserDto;
 import org.acme.service.UserService;
@@ -22,67 +21,62 @@ public class UserResource {
     @Inject
     UserService userService;
 
-
+    @Inject
+    ResourceHelper res;
 
     /*
-    förväntar sig anrop i form av JSON
-    Typ: 
-    {
-        "username": "namhär",
-        "password": "passwordhär"
-    }
-
-    */
+     * förväntar sig anrop i form av JSON
+     * Typ:
+     * {
+     * "username": "namhär",
+     * "password": "passwordhär"
+     * }
+     * 
+     */
     @POST
     @Transactional
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/new-user")
-    public Response newUser (UserDto userDto) {
+    public Response newUser(UserDto userDto) {
 
         try {
             userService.createUser(userDto);
-            return Response.ok("User was successfully created. You can now log in to see your API key.").build();
+            return res.respond("User was successfully created. You can now log in to see your API key.");
 
         } catch (PasswordException e) {
-            return Response.status(400).entity(e.getMessage()).build(); //returnerar felmeddelande till registreringen
+            return res.respond(e);
         } catch (IllegalArgumentException e) {
-            return Response.status(400).entity(e.getMessage()).build(); // se ovan
+            return res.respond(e);
         }
 
     }
 
-    
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/get-key")
-    public Response getKey(UserDto userDto){
+    public Response getKey(UserDto userDto) {
         try {
             String apiKey = userService.fetchApiKey(userDto.getUsername(), userDto.getPassword());
-            return Response.ok(apiKey).build();
-        } catch ( IllegalArgumentException e ) {
-            return Response.status(400).entity(e.getMessage()).build();
+            return res.respond(apiKey);
+        } catch (IllegalArgumentException e) {
+            return res.respond(e);
         }
-       
+
     }
 
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/find-user") 
-    public Response getUserByName(String username){
+    @Path("/find-user")
+    public Response getUserByName(String username) {
 
         try {
             User user = userService.returnUser(username);
-
-            return Response.ok(user).build();
+            return res.respond(user);
         } catch (NotFoundException e) {
-            return Response.status(Response.Status.NOT_FOUND)  
-                    .entity("User not found.")
-                    .build();
+            return res.respond("User not Found", "notFound");
         }
-
     }
-
 }

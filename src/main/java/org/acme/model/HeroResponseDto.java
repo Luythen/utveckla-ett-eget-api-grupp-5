@@ -5,14 +5,12 @@ import org.acme.model.enums.Race;
 import org.acme.model.enums.Weapon;
 
 // Response Data Transfer Object som skickas till frontend. 
-// Innehåller de fält som vi vill visa till klient. (TODO: fixa vilka fält som ska vara med)
 
 public class HeroResponseDto {
 
     private int         id;
     private String      name;
     private String      ownerName;
-    private String      ownerApiKey;
     private HeroClass   heroClass;
     private Race        race;
     private Weapon      weapon;
@@ -109,15 +107,6 @@ public class HeroResponseDto {
 
     public HeroResponseDto setOwnerName(String ownerName) {
         this.ownerName = ownerName;
-        return this;
-    }
-
-    public String getOwnerApiKey() {
-        return ownerApiKey;
-    }
-
-    public HeroResponseDto setOwnerApiKey(String ownerApiKey) {
-        this.ownerApiKey = ownerApiKey;
         return this;
     }
 

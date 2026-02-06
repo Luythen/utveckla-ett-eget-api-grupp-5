@@ -13,6 +13,7 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -84,5 +85,23 @@ public class HeroResource {
         return Response.ok(hero).build();
     }
 
+    //Raderar en hero baserat på id
+    @DELETE
+    @Path("/{id}")
+    @Transactional
+    public Response deleteHero(@PathParam("id") int id){
 
+        boolean deleted = heroService.deleteHero(id);
+
+        //om hero inte finns, returnera 404
+        if(!deleted){
+            return Response
+                .status(Response.Status.NOT_FOUND)
+                .entity("Hero not found")
+                .build();
+        }
+
+        // Om hero har tagits bort, returnera 204 No Content
+        return Response.noContent().build();
+    }
 }

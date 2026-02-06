@@ -163,5 +163,18 @@ public class HeroService {
             .setJackOfAllTrades (hero.getJackOfAllTrades());
     }
 
-    
+    // Raderar en hero baserat på id
+    public boolean deleteHero(int id){
+
+        Hero hero = em.find(Hero.class, id);
+
+        // Om hero inte finns, returnera false
+        if (hero == null){
+            return false; 
+        }
+
+        // Om hero finns, ta bort den från databasen
+        em.remove(hero);
+        return true;
+    }
 }

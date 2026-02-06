@@ -74,7 +74,7 @@ public class UserService {
 
     }
 
-    private User returnUser(String username) {
+    public User returnUser(String username) {
         try {
             return em
                     .createQuery("SELECT u FROM User u Where u.username = :username", User.class)

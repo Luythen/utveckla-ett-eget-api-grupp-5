@@ -24,7 +24,7 @@ public class UserResponseDto {
         return this;
     }
 
-    public String getApiKey() {
+    public String getCurrentUserApi() {
         return apiKey;
     }
 

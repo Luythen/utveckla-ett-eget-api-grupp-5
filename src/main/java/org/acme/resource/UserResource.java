@@ -1,6 +1,7 @@
 package org.acme.resource;
 
 
+import org.acme.model.User;
 import org.acme.model.UserDto;
 import org.acme.service.UserService;
 import org.bouncycastle.openssl.PasswordException;
@@ -8,6 +9,7 @@ import org.bouncycastle.openssl.PasswordException;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -30,7 +32,6 @@ public class UserResource {
         "password": "passwordhär"
     }
 
-    PW måste 
     */
     @POST
     @Transactional
@@ -64,6 +65,24 @@ public class UserResource {
             return Response.status(400).entity(e.getMessage()).build();
         }
        
+    }
+
+    @POST
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/find-user") 
+    public Response getUserByName(String username){
+
+        try {
+            User user = userService.returnUser(username);
+
+            return Response.ok(user).build();
+        } catch (NotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND)  
+                    .entity("User not found.")
+                    .build();
+        }
+
     }
 
 }

@@ -48,7 +48,7 @@ public class ApiKeyFilter implements ContainerRequestFilter {
     private String apiKey;
 
     // Returnerar api key för att kunna verifiera att rätt användare bara ändrar karaktärer/users som de har rättigheter till
-    public String getApiKey(){
+    public String getCurrentUserApi(){
         return this.apiKey;
     }
 
@@ -62,8 +62,6 @@ public class ApiKeyFilter implements ContainerRequestFilter {
         if (path.startsWith("/api/users")) {
             return;
         }
-
-
 
         String apiKey = requestContext.getHeaderString("X-API-KEY"); // Hämtar API key från headern
         this.apiKey = apiKey;

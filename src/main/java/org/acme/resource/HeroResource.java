@@ -100,7 +100,7 @@ public class HeroResource {
             
             return Response
                 .status(Response.Status.FORBIDDEN)
-                .entity(e)
+                .entity(e.getMessage())
                 .build();
         }
 
@@ -112,8 +112,8 @@ public class HeroResource {
     description = SwaggerDocs.HERO_FETCH_ALL_HEROES_JAVASCRIPT_STRING
 )
     @Path("/get-all-heroes")
-    public List<HeroResponseDto> getAllHeroes(){
-        return heroService.getAllHeroes();
+    public List<HeroResponseDto> getHeroes(){
+        return heroService.getHeroes();
     }
 
     @POST
@@ -140,48 +140,64 @@ public class HeroResource {
                 .status(Response.Status.NOT_FOUND)
                 .entity("Hero not found")
                 .build();
+        } catch (AccessDeniedException e) {
+            return Response
+                .status(Response.Status.BAD_REQUEST)
+                .entity(e.getMessage())
+                .build();
         }
-
     }
 
-    //Uppdaterar en hero baserat på id
+    // Uppdaterar en hero baserat på id
     @PATCH
     @Path("/update-hero")
     @Transactional
-    public Response updateHero(HeroDto heroDto){
+    public Response updateHero(HeroDto heroDto) {
 
-        // kontrollera att data har skickats. 
+        // kontrollera att data har skickats.
         if (heroDto == null) {
+
             return Response
-                .status(Response.Status.BAD_REQUEST)
-                .entity("No hero data provided")
-                .build();
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity("No hero data provided")
+                    .build();
         }
 
         // Kontrollera att namn finns.
         if (heroDto.getName() == null || heroDto.getName().isEmpty()) {
+
             return Response
-                .status(Response.Status.BAD_REQUEST)
-                .entity("Hero name is required")
-                .build();
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity("Hero name is required")
+                    .build();
         }
 
-        //Anropa service för att uppdatera hero
-        HeroResponseDto hero = heroService.updateHero(heroDto);
+        // Anropa service för att uppdatera hero
+        try {
+            HeroResponseDto hero = heroService.updateHero(heroDto);
 
-        // Om hero inte finns, returnera 404
-        if (hero == null){
-            return Response
-                .status(Response.Status.NOT_FOUND)
-                .entity("Hero not found")
-                .build();
+            // Om hero inte finns, returnera 404
+            if (hero == null) {
+
+                return Response
+                        .status(Response.Status.NOT_FOUND)
+                        .entity("Hero not found")
+                        .build();
+            }
+
+            // Returnera uppdaterad hero
+            return Response.ok(hero).build();
+
+        } catch (AccessDeniedException e) {
+
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(e.getMessage())
+                    .build();
+
         }
-
-        //Returnera uppdaterad hero
-        return Response.ok(hero).build();
     }
 
-    //Raderar en hero baserat på id
+    // Raderar en hero baserat på id
     @DELETE
     @APIResponse(
         responseCode = "JAVASCRIPT EXAMPLE",
@@ -189,22 +205,29 @@ public class HeroResource {
     )
     @Path("/{id}")
     @Transactional
-    public Response deleteHero(@PathParam("id") int id){
-        
-    
-    boolean deleted = heroService.deleteHero(id);
-    
-    //om hero inte finns, returnera 404
-    if(!deleted){
-        return Response
-        .status(Response.Status.NOT_FOUND)
-        .entity("Hero not found")
-        .build();
+    public Response deleteHero(@PathParam("id") int id) {
+
+        try {
+            boolean deleted = heroService.deleteHero(id);
+
+            // om hero inte finns, returnera 404
+            if (!deleted) {
+                return Response
+                        .status(Response.Status.NOT_FOUND)
+                        .entity("Hero not found")
+                        .build();
+            }
+
+            // Om hero har tagits bort, returnera 204 No Content
+            return Response.noContent().build();
+
+        } catch (AccessDeniedException e) {
+
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(e.getMessage())
+                    .build();
+        }
     }
-    
-    // Om hero har tagits bort, returnera 204 No Content
-    return Response.noContent().build();
-}
         
     // Exempel: /api/hero/get-hero-by-class/MAGE
     // Detta visar alla hjältar som har klassen MAGE

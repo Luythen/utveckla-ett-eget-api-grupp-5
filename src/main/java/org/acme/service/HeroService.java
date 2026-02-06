@@ -28,14 +28,16 @@ import jakarta.ws.rs.NotFoundException;
 @Named
 public class HeroService {
     
+    
     @Inject
     EntityManager em;
     
     @Inject
     UserService userService;
-
+    
     @Inject
     ApiKeyFilter apiKeyFilter;
+    
 
     /* ============================================================== */
     /* Skapar ny hero baserad på data från inkommande HeroDto objekt. */
@@ -68,30 +70,30 @@ public class HeroService {
         Weapon    weapon    = Weapon    .fromString(heroDto.getWeapon());
         Race      race      = Race      .fromString(heroDto.getRace());
 
-        String  apiKey      = apiKeyFilter.getApiKey(); // aktuell "inloggad" apinyckel
 
-        User    owner       = userService.getUserByApiKey(apiKey);
-        String  ownerApiKey = owner.getApiKey();
+        User    owner       = userService.getUserByApiKey(apiKeyFilter.getCurrentUserApi());
         String  ownerName   = owner.getUsername();
        
+        
         if (heroExists(heroDto)) {
             throw new AccessDeniedException("A hero by this name is already created. Pick another name.");
         }
-
-
+        
         Hero hero = new Hero();
-         hero
-                .setName(heroDto.getName())      
-                .setHeroClass(heroClass)
-                .setOwnerApiKey(ownerApiKey)
-                .setOwnerName(ownerName)
-                .setWeapon(weapon)
-                .setRace(race)
-                .setFocusedFire(isElf(race)) // Boolean som verifierar raser
-                .setSteadyFrame(isDwarf(race)) // Är man alv har man focusedFire true
-                .setStrongArms(isOrc(race)) // dwarf steadyFrame true, osv.
-                .setJackOfAllTrades(isHuman(race));
 
+        
+        hero
+        .setName(heroDto.getName())      
+        .setHeroClass(heroClass)
+        .setOwnerApiKey(apiKeyFilter.getCurrentUserApi())
+        .setOwnerName(ownerName)
+        .setWeapon(weapon)
+        .setRace(race)
+        .setFocusedFire(isElf(race)) // Boolean som verifierar raser
+        .setSteadyFrame(isDwarf(race)) // Är man alv har man focusedFire true
+        .setStrongArms(isOrc(race)) // dwarf steadyFrame true, osv.
+        .setJackOfAllTrades(isHuman(race));
+        
         em.persist(hero);
 
         // Skapa och returnera en HeroResponseDto baserad på den sparade heron
@@ -101,7 +103,13 @@ public class HeroService {
     }
 
     private boolean heroExists(HeroDto heroDto) {
-        return heroDto.getName() == null;
+        List<Hero> heroes = getAllHeroes();
+        for (Hero h : heroes) {
+            if (h.getName().equals(heroDto.getName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // Här sker verifiering av ras för att sätta rätt boolean värde
@@ -122,20 +130,29 @@ public class HeroService {
         return race == Race.HUMAN;
     }
 
-    public List<HeroResponseDto> getAllHeroes() {
+    public List<Hero> getAllHeroes(){
+        return em.createQuery("SELECT h FROM Hero h", Hero.class).getResultList();
+        
+    }
 
-        List<Hero> heroes = em.createQuery("SELECT h FROM Hero h", Hero.class).getResultList();
+    public List<HeroResponseDto> getHeroes() {
+
+        List<Hero> heroes = getAllHeroes();
+    
         List<HeroResponseDto> heroResponseDtos = new ArrayList<>();
 
-        for (Hero hero : heroes) {
-            HeroResponseDto heroResponseDto = createHeroResponseDto(hero);
-            heroResponseDtos.add(heroResponseDto);
+        for (Hero h : heroes) {
+            if (h.getOwnerApiKey().equals(apiKeyFilter.getCurrentUserApi())) {
+                HeroResponseDto heroResponseDto = createHeroResponseDto(h);
+                heroResponseDtos.add(heroResponseDto);        
+            }
         }
+
         return heroResponseDtos;
     }
 
     // Uppdaterar en hero baserat på id
-    public HeroResponseDto updateHero(HeroDto heroDto) {
+    public HeroResponseDto updateHero(HeroDto heroDto) throws AccessDeniedException {
 
         // hämtar hero från databasen med id
         try {
@@ -144,10 +161,14 @@ public class HeroService {
                     .setParameter("name", heroDto.getName())
                     .getSingleResult();
 
+            
+            if (!hero.getOwnerApiKey().equals(apiKeyFilter.getCurrentUserApi())) {
+                throw new AccessDeniedException("The hero you are trying to edit belongs another user.");
+            }
             // Konvertera string till enum
-            Race enumifiedRace = Race.fromString(heroDto.getRace());
-            Weapon weapon = Weapon.fromString(heroDto.getWeapon());
-            HeroClass heroClass = HeroClass.fromString(heroDto.getHeroClass());
+            Race        enumifiedRace   = Race.fromString(heroDto.getRace());
+            Weapon      weapon          = Weapon.fromString(heroDto.getWeapon());
+            HeroClass   heroClass       = HeroClass.fromString(heroDto.getHeroClass());
 
             //Uppdatera alla fält med nya värden
             hero.setName                (heroDto.getName())
@@ -172,7 +193,7 @@ public class HeroService {
     }
 
     // Raderar en hero baserat på id
-    public boolean deleteHero(int id) {
+    public boolean deleteHero(int id) throws AccessDeniedException {
 
         Hero hero = em.find(Hero.class, id);
 
@@ -181,17 +202,26 @@ public class HeroService {
             return false;
         }
 
+        if (!hero.getOwnerApiKey().equals(apiKeyFilter.getCurrentUserApi())) {
+            throw new AccessDeniedException("This hero belongs to another user.");
+        }
+
         // Om hero finns, ta bort den från databasen
         em.remove(hero);
         return true;
     }
 
-    public HeroResponseDto getHeroByName(String name) throws NoResultException {
+    public HeroResponseDto getHeroByName(String name) throws NoResultException, AccessDeniedException {
 
         try {
             Hero hero = em.createQuery("SELECT h FROM Hero h WHERE h.name = :name", Hero.class)
                     .setParameter("name", name)
                     .getSingleResult();
+
+            if (!hero.getOwnerApiKey().equals(apiKeyFilter.getCurrentUserApi())) {
+                throw new AccessDeniedException("This hero belongs to another user.");
+            }
+
             return createHeroResponseDto(hero);
         } catch (NoResultException e) {
             throw new IllegalArgumentException("No hero by that name could be found.");
@@ -208,13 +238,14 @@ public class HeroService {
         List<HeroResponseDto> heroResponseDtos = new ArrayList<>();
 
         for (Hero hero : heroes) {
-            HeroResponseDto heroResponseDto = createHeroResponseDto(hero);
-            heroResponseDtos.add(heroResponseDto);
+            if (hero.getOwnerApiKey().equals(apiKeyFilter.getCurrentUserApi())) {
+                HeroResponseDto heroResponseDto = createHeroResponseDto(hero);
+                heroResponseDtos.add(heroResponseDto);
+            }
 
         }
         return heroResponseDtos;
     }
-
 
     // Helper klass för att skapa en responseDto utirån ett hero objekt.
     private HeroResponseDto createHeroResponseDto(Hero hero) {
@@ -222,7 +253,6 @@ public class HeroService {
         return new HeroResponseDto()
                 .setId             (hero.getId())
                 .setName           (hero.getName())
-                .setOwnerApiKey    (hero.getOwnerApiKey())
                 .setOwnerName      (hero.getOwnerName())
                 .setRace           (hero.getRace())
                 .setHeroClass      (hero.getHeroClass())

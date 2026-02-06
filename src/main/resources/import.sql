@@ -5,10 +5,10 @@
 -- insert into myentity (id, field) values(3, 'field-3');
 -- alter sequence myentity_seq restart with 4;
 
-insert into hero (name, heroClass, race, weapon, focusedFire, steadyFrame, strongArms, jackOfAllTrades) values ('Jayce' , 'WARRIOR' , 'HUMAN' , 'SWORD', false , false , false , true );
-insert into hero (name, heroClass, race, weapon, focusedFire, steadyFrame, strongArms, jackOfAllTrades) values ('Sammy' , 'ROGUE'   , 'ELF'   , 'SWORD', true  , false , false , false);
-insert into hero (name, heroClass, race, weapon, focusedFire, steadyFrame, strongArms, jackOfAllTrades) values ('Gronk' , 'PALADIN' , 'DWARF' , 'SWORD', false , true  , false , false);
-insert into hero (name, heroClass, race, weapon, focusedFire, steadyFrame, strongArms, jackOfAllTrades) values ('Nark'  , 'MAGE'    , 'ORC'   , 'SWORD', false , false , true  , false);
+insert into hero (name, heroClass, race, weapon, focusedFire, steadyFrame, strongArms, jackOfAllTrades, ownerApiKey) values ('Jayce' , 'WARRIOR' , 'HUMAN' , 'SWORD', false , false , false , true , 12345);
+insert into hero (name, heroClass, race, weapon, focusedFire, steadyFrame, strongArms, jackOfAllTrades, ownerApiKey) values ('Sammy' , 'ROGUE'   , 'ELF'   , 'SWORD', true  , false , false , false, 1234);
+insert into hero (name, heroClass, race, weapon, focusedFire, steadyFrame, strongArms, jackOfAllTrades, ownerApiKey) values ('Gronk' , 'PALADIN' , 'DWARF' , 'SWORD', false , true  , false , false, 1234567);
+insert into hero (name, heroClass, race, weapon, focusedFire, steadyFrame, strongArms, jackOfAllTrades, ownerApiKey) values ('Nark'  , 'MAGE'    , 'ORC'   , 'SWORD', false , false , true  , false, 123456);
 
 
 -- Lägger till en enda test-user. Vi behöver inte testa lösenord och sådant längre, så det är irrelevant

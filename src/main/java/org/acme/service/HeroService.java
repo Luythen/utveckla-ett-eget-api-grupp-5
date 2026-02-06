@@ -4,7 +4,7 @@ import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.acme.config.ApiKeyFilter;
+import org.acme.config.ApiKeyHolder;
 import org.acme.model.Hero;
 import org.acme.model.HeroDto;
 import org.acme.model.HeroResponseDto;
@@ -37,7 +37,7 @@ public class HeroService {
     UserService userService;
     
     @Inject
-    ApiKeyFilter apiKeyFilter;
+    ApiKeyHolder apiKeyHolder;
     
 
     /* ============================================================== */
@@ -72,7 +72,7 @@ public class HeroService {
         Race      race      = Race      .fromString(heroDto.getRace());
 
 
-        User    owner       = userService.getUserByApiKey(apiKeyFilter.getCurrentUserApi());
+        User    owner       = userService.getUserByApiKey(apiKeyHolder.getApiKey());
         String  ownerName   = owner.getUsername();
        
         
@@ -86,7 +86,7 @@ public class HeroService {
         hero
         .setName(heroDto.getName())      
         .setHeroClass(heroClass)
-        .setOwnerApiKey(apiKeyFilter.getCurrentUserApi())
+        .setOwnerApiKey(apiKeyHolder.getApiKey())
         .setOwnerName(ownerName)
         .setWeapon(weapon)
         .setRace(race)
@@ -157,7 +157,7 @@ public class HeroService {
         List<HeroResponseDto> heroResponseDtos = new ArrayList<>();
 
         for (Hero h : heroes) {
-            if (h.getOwnerApiKey().equals(apiKeyFilter.getCurrentUserApi())) {
+            if (h.getOwnerApiKey().equals(apiKeyHolder.getApiKey())) {
                 HeroResponseDto heroResponseDto = createHeroResponseDto(h);
                 heroResponseDtos.add(heroResponseDto);
             }
@@ -171,7 +171,7 @@ public class HeroService {
     }
 
     // Uppdaterar en hero baserat på id
-    public HeroResponseDto updateHero(HeroDto heroDto) throws AccessDeniedException {
+    public HeroResponseDto updateHero(HeroDto heroDto) throws AccessDeniedException, NoResultException {
 
         // hämtar hero från databasen med id
         try {
@@ -181,7 +181,7 @@ public class HeroService {
                     .getSingleResult();
 
             
-            if (!hero.getOwnerApiKey().equals(apiKeyFilter.getCurrentUserApi())) {
+            if (!hero.getOwnerApiKey().equals(apiKeyHolder.getApiKey())) {
                 throw new AccessDeniedException("The hero you are trying to edit belongs another user.");
             }
             // Konvertera string till enum
@@ -216,6 +216,9 @@ public class HeroService {
 
     public HeroResponseDto getHeroResponseById(int id) throws NotFoundException{
         Hero hero = getHeroById(id);
+        if (hero == null) {
+            throw new NotFoundException("No hero with that ID could be found.");
+        }
         return createHeroResponseDto(hero);
     }
 
@@ -252,7 +255,7 @@ public class HeroService {
             throw new NotFoundException("Hero not found.");
         }
 
-        if (!hero.getOwnerApiKey().equals(apiKeyFilter.getCurrentUserApi())) {
+        if (!hero.getOwnerApiKey().equals(apiKeyHolder.getApiKey())) {
             throw new AccessDeniedException("This hero belongs to another user.");
         }
 
@@ -268,7 +271,7 @@ public class HeroService {
                     .setParameter("name", name)
                     .getSingleResult();
 
-            if (!hero.getOwnerApiKey().equals(apiKeyFilter.getCurrentUserApi())) {
+            if (!hero.getOwnerApiKey().equals(apiKeyHolder.getApiKey())) {
                 throw new AccessDeniedException("This hero belongs to another user.");
             }
 
@@ -319,7 +322,7 @@ public class HeroService {
         List<HeroResponseDto> heroResponseDtos = new ArrayList<>();
 
         for (Hero hero : heroes) {
-            if (hero.getOwnerApiKey().equals(apiKeyFilter.getCurrentUserApi())) {
+            if (hero.getOwnerApiKey().equals(apiKeyHolder.getApiKey())) {
                 HeroResponseDto heroResponseDto = createHeroResponseDto(hero);
                 heroResponseDtos.add(heroResponseDto);
             }

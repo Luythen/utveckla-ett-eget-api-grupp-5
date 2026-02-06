@@ -44,13 +44,8 @@ public class ApiKeyFilter implements ContainerRequestFilter {
     @Inject
     EntityManager em;
 
-
-    private String apiKey;
-
-    // Returnerar api key för att kunna verifiera att rätt användare bara ändrar karaktärer/users som de har rättigheter till
-    public String getCurrentUserApi(){
-        return this.apiKey;
-    }
+    @Inject
+    ApiKeyHolder apiKeyHolder;
 
 
 
@@ -64,7 +59,7 @@ public class ApiKeyFilter implements ContainerRequestFilter {
         }
 
         String apiKey = requestContext.getHeaderString("X-API-KEY"); // Hämtar API key från headern
-        this.apiKey = apiKey;
+        apiKeyHolder.setApiKey(apiKey);
 
         // Om ingen API key finns i headern, avbryt requesten med 401 Unauthorized
         if (apiKey == null || apiKey.isEmpty()) {

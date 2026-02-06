@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.acme.model.HeroResponseDto;
 import org.acme.model.User;
+import org.bouncycastle.openssl.PasswordException;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.NoResultException;
@@ -75,6 +76,7 @@ public class ResourceHelper {
 
           return switch (error) {
             case IllegalArgumentException   e -> Status.BAD_REQUEST;
+            case PasswordException          e -> Status.BAD_REQUEST;
             case NotFoundException          e -> Status.NOT_FOUND;  // Ja, jag vet att vi hade kunnat skriva
             case NoResultException          e -> Status.NOT_FOUND; // båda på samma case, men snyggare såhär
             case AccessDeniedException      e -> Status.FORBIDDEN;

@@ -8,7 +8,6 @@ import org.bouncycastle.openssl.PasswordException;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -75,8 +74,8 @@ public class UserResource {
         try {
             User user = userService.returnUser(username);
             return res.respond(user);
-        } catch (NotFoundException e) {
-            return res.respond("User not Found", "notFound");
+        } catch (IllegalArgumentException e) {
+            return res.respond(e);
         }
     }
 }

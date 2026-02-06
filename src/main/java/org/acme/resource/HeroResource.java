@@ -3,7 +3,6 @@ package org.acme.resource;
 import java.nio.file.AccessDeniedException;
 
 import org.acme.SwaggerMessages.SwaggerDocs;
-import org.acme.config.ApiKeyFilter;
 import org.acme.model.HeroDto;
 import org.acme.model.HeroResponseDto;
 import org.acme.service.HeroService;
@@ -39,9 +38,6 @@ public class HeroResource {
 
     @Inject
     EntityManager em;
-
-    @Inject
-    ApiKeyFilter apiKeyFilter;
 
     @POST
     @Transactional

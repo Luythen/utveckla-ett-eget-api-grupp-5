@@ -40,8 +40,41 @@ public class HeroResource {
     @Operation(summary = "Creates a new hero", description = "Creates a new hero in the system, check Example Value for structure.")
     @APIResponse(responseCode = "200",description = "Successfully created hero")
     @APIResponse(responseCode = "500", description = "Server error when creating hero, check that predefined race and class are valid")
+    @APIResponse(responseCode = "400", description = "Invalid hero data")
     @Path("/new-hero")
     public Response newHero(HeroDto heroDto){
+
+        // Kontrollera om hero är null, vilket kan hända om användaren inte skickar data eller skickar fel format
+        if (heroDto == null) {
+            return Response
+                .status(Response.Status.BAD_REQUEST)
+                .entity("Invalid hero data")
+                .build();
+        }
+
+        // Kontrollera om hero namn finns.
+        if (heroDto.getName() == null || heroDto.getName().isEmpty()) {
+            return Response
+                .status(Response.Status.BAD_REQUEST)
+                .entity("Hero name is required")
+                .build();
+        }
+
+        // Kontrollera om hero race finns.
+        if (heroDto.getRace() == null || heroDto.getRace().isEmpty()) {
+            return Response
+                .status(Response.Status.BAD_REQUEST)
+                .entity("Hero race is required")
+                .build();
+        }
+
+        //kontrollera om hero class finns.
+        if (heroDto.getHeroClass() == null || heroDto.getHeroClass().isEmpty()) {
+            return Response
+                .status(Response.Status.BAD_REQUEST)
+                .entity("Hero class is required")
+                .build();
+        }
 
         try {
             
@@ -71,12 +104,23 @@ public class HeroResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Path("/get-hero-by-name")
     public Response getHeroByName(String heroName){
-        
+
+        // Kontrollera om hero namn blev skrivet
+        if (heroName == null || heroName.isEmpty()) {
+            return Response
+                .status(Response.Status.BAD_REQUEST)
+                .entity("Hero name is required")
+                .build();
+        }
+
         try {
-        HeroResponseDto responseDto =  heroService.getHeroByName(heroName);
-        return Response.ok(responseDto).build();
+            HeroResponseDto responseDto =  heroService.getHeroByName(heroName);
+            return Response.ok(responseDto).build();
         } catch (IllegalArgumentException e) {
-            return Response.status(0).entity(e.getMessage()).build();
+            return Response
+                .status(Response.Status.NOT_FOUND)
+                .entity("Hero not found")
+                .build();
         }
 
     }

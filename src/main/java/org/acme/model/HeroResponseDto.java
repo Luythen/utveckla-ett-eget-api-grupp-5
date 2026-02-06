@@ -9,15 +9,17 @@ import org.acme.model.enums.Weapon;
 
 public class HeroResponseDto {
 
-    private int     id;
-    private String  name;
-    private HeroClass  heroClass;
-    private Race    race;
-    private Weapon  weapon;
-    private boolean focusedFire;     // Elf
-    private boolean steadyFrame;     // Dwarf
-    private boolean strongArms;      // Orc
-    private boolean jackOfAllTrades; // Human
+    private int         id;
+    private String      name;
+    private String      ownerName;
+    private String      ownerApiKey;
+    private HeroClass   heroClass;
+    private Race        race;
+    private Weapon      weapon;
+    private boolean     focusedFire;     // Elf
+    private boolean     steadyFrame;     // Dwarf
+    private boolean     strongArms;      // Orc
+    private boolean     jackOfAllTrades; // Human
 
     public int getId() {
         return id;
@@ -100,6 +102,26 @@ public class HeroResponseDto {
         this.weapon = weapon;
         return this;
     }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public HeroResponseDto setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+        return this;
+    }
+
+    public String getOwnerApiKey() {
+        return ownerApiKey;
+    }
+
+    public HeroResponseDto setOwnerApiKey(String ownerApiKey) {
+        this.ownerApiKey = ownerApiKey;
+        return this;
+    }
+
+    
 
     
 

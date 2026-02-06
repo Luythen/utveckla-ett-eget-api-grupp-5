@@ -42,6 +42,14 @@ public class UserService {
         user.persist();
     }
 
+
+    public User getUserByApiKey(String apiKey){
+        return em.createQuery("SELECT u FROM User u WHERE u.apiKey = :apiKey", User.class)
+        .setParameter("apiKey", apiKey)
+        .getSingleResult();
+    }
+
+
     // Kontrollerar om ett användarnamn redan är registrerat i databasen.
     // Returnerar true om användaren finns, annars false.
     private boolean userExists(String username) {

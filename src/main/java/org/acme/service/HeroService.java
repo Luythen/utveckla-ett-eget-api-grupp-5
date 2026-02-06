@@ -1,11 +1,14 @@
 package org.acme.service;
 
+import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.acme.config.ApiKeyFilter;
 import org.acme.model.Hero;
 import org.acme.model.HeroDto;
 import org.acme.model.HeroResponseDto;
+import org.acme.model.User;
 import org.acme.model.enums.Race;
 import org.acme.model.enums.HeroClass;
 import org.acme.model.enums.Weapon;
@@ -27,6 +30,12 @@ public class HeroService {
     
     @Inject
     EntityManager em;
+    
+    @Inject
+    UserService userService;
+
+    @Inject
+    ApiKeyFilter apiKeyFilter;
 
     /* ============================================================== */
     /* Skapar ny hero baserad på data från inkommande HeroDto objekt. */
@@ -48,20 +57,34 @@ public class HeroService {
      * 
      */
     /* ============================================================== */
-    public HeroResponseDto createHero(HeroDto heroDto) throws IllegalArgumentException {
+    public HeroResponseDto createHero(HeroDto heroDto) throws IllegalArgumentException, AccessDeniedException {
+
 
         // HeroDto objekt tar emot attribut som sträng, så några av dem behöver
         // konverteras till enum
         // Därför 'enumifieras' de här innan den appliceras på övriga hero fält.
 
-        Weapon weapon       = Weapon.fromString(heroDto.getWeapon());
-        Race race           = Race.fromString(heroDto.getRace());
-        HeroClass heroClass = HeroClass.fromString(heroDto.getHeroClass());
+        HeroClass heroClass = HeroClass .fromString(heroDto.getHeroClass());
+        Weapon    weapon    = Weapon    .fromString(heroDto.getWeapon());
+        Race      race      = Race      .fromString(heroDto.getRace());
+
+        String  apiKey      = apiKeyFilter.getApiKey(); // aktuell "inloggad" apinyckel
+
+        User    owner       = userService.getUserByApiKey(apiKey);
+        String  ownerApiKey = owner.getApiKey();
+        String  ownerName   = owner.getUsername();
+       
+        if (heroExists(heroDto)) {
+            throw new AccessDeniedException("A hero by this name is already created. Pick another name.");
+        }
+
 
         Hero hero = new Hero();
-        hero
-                .setName(heroDto.getName())
+         hero
+                .setName(heroDto.getName())      
                 .setHeroClass(heroClass)
+                .setOwnerApiKey(ownerApiKey)
+                .setOwnerName(ownerName)
                 .setWeapon(weapon)
                 .setRace(race)
                 .setFocusedFire(isElf(race)) // Boolean som verifierar raser
@@ -75,6 +98,10 @@ public class HeroService {
 
         return createHeroResponseDto(hero);
 
+    }
+
+    private boolean heroExists(HeroDto heroDto) {
+        return heroDto.getName() == null;
     }
 
     // Här sker verifiering av ras för att sätta rätt boolean värde
@@ -193,14 +220,16 @@ public class HeroService {
     private HeroResponseDto createHeroResponseDto(Hero hero) {
 
         return new HeroResponseDto()
-                .setId(hero.getId())
-                .setName(hero.getName())
-                .setRace(hero.getRace())
-                .setHeroClass(hero.getHeroClass())
-                .setWeapon(hero.getWeapon())
-                .setFocusedFire(hero.getFocusedFire())
-                .setSteadyFrame(hero.getSteadyFrame())
-                .setStrongArms(hero.getStrongArms())
+                .setId             (hero.getId())
+                .setName           (hero.getName())
+                .setOwnerApiKey    (hero.getOwnerApiKey())
+                .setOwnerName      (hero.getOwnerName())
+                .setRace           (hero.getRace())
+                .setHeroClass      (hero.getHeroClass())
+                .setWeapon         (hero.getWeapon())
+                .setFocusedFire    (hero.getFocusedFire())
+                .setSteadyFrame    (hero.getSteadyFrame())
+                .setStrongArms     (hero.getStrongArms())
                 .setJackOfAllTrades(hero.getJackOfAllTrades());
 
     }

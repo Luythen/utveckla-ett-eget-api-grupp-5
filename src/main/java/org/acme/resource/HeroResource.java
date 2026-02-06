@@ -1,9 +1,11 @@
 package org.acme.resource;
 
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 import org.acme.SwaggerMessages.SwaggerDocs;
+import org.acme.config.ApiKeyFilter;
 import org.acme.model.HeroDto;
 import org.acme.model.HeroResponseDto;
 import org.acme.service.HeroService;
@@ -35,6 +37,9 @@ public class HeroResource {
 
     @Inject
     EntityManager em;
+
+    @Inject
+    ApiKeyFilter apiKeyFilter;
     
     @POST
     @Transactional
@@ -90,6 +95,13 @@ public class HeroResource {
             .status(Response.Status.INTERNAL_SERVER_ERROR)
             .entity("Error creating hero")
             .build();
+            
+        } catch (AccessDeniedException e) {
+            
+            return Response
+                .status(Response.Status.FORBIDDEN)
+                .entity(e)
+                .build();
         }
 
     }

@@ -30,6 +30,10 @@ import jakarta.ws.rs.core.MediaType;
 @Consumes(MediaType.APPLICATION_JSON)
 public class HeroResource {
 
+    // Konstanter för att passera rätt felmeddelande till resourhelpern
+    private final String BAD = "bad";
+    private final String NOT_FOUND = "notFound";
+
     @Inject
     ResourceHelper res;
 
@@ -49,22 +53,22 @@ public class HeroResource {
         // Kontrollera om hero är null, vilket kan hända om användaren inte skickar data
         // eller skickar fel format
         if (heroDto == null) {
-            return res.respond("Invalid hero data.", "bad");
+            return res.respond("Invalid hero data.", BAD);
         }
 
         // Kontrollera om hero namn finns.
         if (heroDto.getName() == null || heroDto.getName().isEmpty()) {
-            return res.respond("Hero name is required.", "bad");
+            return res.respond("Hero name is required.", BAD);
         }
 
         // Kontrollera om hero race finns.
         if (heroDto.getRace() == null || heroDto.getRace().isEmpty()) {
-            return res.respond("Hero race is required.", "bad");
+            return res.respond("Hero race is required.", BAD);
         }
 
         // kontrollera om hero class finns.
         if (heroDto.getHeroClass() == null || heroDto.getHeroClass().isEmpty()) {
-            return res.respond("Hero class is required.", "bad");
+            return res.respond("Hero class is required.", BAD);
         }
 
         try {
@@ -110,7 +114,7 @@ public class HeroResource {
         // Kontrollera om hero namn blev skrivet
 
         if (heroName == null || heroName.isEmpty()) {
-            return res.respond("Hero name is required", "bad");
+            return res.respond("Hero name is required", BAD);
         }
         try {
             HeroResponseDto responseDto = heroService.getHeroByName(heroName);
@@ -149,13 +153,13 @@ public class HeroResource {
         // kontrollera att data har skickats.
         if (heroDto == null) {
 
-            return res.respond("No hero data provided.", "bad");
+            return res.respond("No hero data provided.", BAD);
         }
 
         // Kontrollera att namn finns.
         if (heroDto.getName() == null || heroDto.getName().isEmpty()) {
 
-            return res.respond("Hero name is required.", "bad");
+            return res.respond("Hero name is required.", BAD);
         }
 
         // Anropa service för att uppdatera hero
@@ -164,7 +168,7 @@ public class HeroResource {
 
             // Om hero inte finns, returnera 404
             if (hero == null) {
-                return res.respond("Hero not Found", "notFound");
+                return res.respond("Hero not Found", NOT_FOUND);
             }
             // Returnera uppdaterad hero
             return res.respond(hero);
@@ -221,7 +225,7 @@ public class HeroResource {
 
             // om hero inte finns, returnera 404
             if (!deleted) {
-                return res.respond("Hero not found", "notFound");
+                return res.respond("Hero not found", NOT_FOUND);
             }
 
             // Om hero har tagits bort, returnera 204 No Content

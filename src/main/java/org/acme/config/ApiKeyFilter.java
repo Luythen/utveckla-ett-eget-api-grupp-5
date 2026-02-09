@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.acme.model.User;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.ws.rs.container.ContainerRequestContext;
@@ -37,21 +38,28 @@ Steg för steg:
 
 @Provider     // <-- Gör att quarkus hittar filtret automatiskt och applicerar det på inkommande requests
 @PreMatching // <-- Gör att filtret körs innan requesten matchas mot en endpoint
+@ApplicationScoped
 public class ApiKeyFilter implements ContainerRequestFilter {
 
     @Inject
     EntityManager em;
+
+    @Inject
+    ApiKeyHolder apiKeyHolder;
+
+
 
     @Override 
     public void filter(ContainerRequestContext requestContext) throws IOException {
         String path = requestContext.getUriInfo().getPath(); // Hämtar den inkommande requestens path
 
         // Låt alla requests till /api/users passera utan API key kontroll
-        if (path.startsWith("/api/users")) {
+        if (path.startsWith("/api/users") || path.startsWith("/api/hero/get-all-heroes")) {
             return;
         }
 
         String apiKey = requestContext.getHeaderString("X-API-KEY"); // Hämtar API key från headern
+        apiKeyHolder.setApiKey(apiKey);
 
         // Om ingen API key finns i headern, avbryt requesten med 401 Unauthorized
         if (apiKey == null || apiKey.isEmpty()) {

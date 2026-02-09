@@ -5,6 +5,7 @@ import java.util.List;
 // Enum för olika raser.
 // Innehåller rasens namn för att kunna användas som display i frontend, samt en beskrivning av rasen.
 
+@SuppressWarnings("null")
 public enum HeroClass {
 
     PALADIN     ("Paladin" ,"A shining hero devoted to justice, healing friends and smiting evil while delivering speeches nobody asked for but everyone endures."),

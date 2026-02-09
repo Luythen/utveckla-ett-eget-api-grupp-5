@@ -2,6 +2,7 @@ package org.acme.model.enums;
 
 import java.util.List;
 
+@SuppressWarnings("null")
 public enum Weapon {
 
     SWORD   ("Sword",   "Shines in the sun, sings in battle, and solves most problems with a swing."),

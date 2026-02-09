@@ -8,7 +8,6 @@ public class SwaggerDocs {
 
         Example JS:
 
-        
         async function getAllHeroes(){
             const response = await fetch("http://localhost:8080/api/hero/get-all-heroes", {
                 method: "GET",
@@ -20,7 +19,6 @@ public class SwaggerDocs {
             const result = await response.json();
             console.log(result);
         }
-        ```
     """;
         
     public static final String HERO_DELETE_HERO_JAVASCRIPT_STRING = 
@@ -28,40 +26,37 @@ public class SwaggerDocs {
         Deletes a hero by id.
 
         Example JS:
-        
-       async function deleteHero(id) {
-    const response = await fetch(`http://localhost:8080/api/hero/${id}`,
-        {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-                "X-API-KEY": "123456",                
-            },
-            body: id,
-        }
-        );
-        if (!response.ok) {  
-        }
+
+        async function deleteHero(id) {
+            const response = await fetch(`http://localhost:8080/api/hero/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "X-API-KEY": "123456"
+                }
+            });
+
+            if (!response.ok) {
+                console.log("Error deleting hero");
+            }
         }
     """;
 
     public static final String HERO_FETCH_HERO_BY_NAME_JAVASCRIPT_STRING =
-       
     """
         Returns hero by name.
 
         Example JS:
 
         async function getHeroByName(name){
-        const response = await fetch("http://localhost:8080/api/hero/get-hero-by-name", {
-        method: "POST",
-        headers: { 
-            "Content-Type": "text/plain",
-            "X-API-KEY": "123456" },  
-        body: name      
-        });
-        const result = await response.json()
-        console.log(result);
+            const response = await fetch(`http://localhost:8080/api/hero/get-hero-by-name/${name}`, {
+                method: "GET",
+                headers: {
+                    "X-API-KEY": "123456"
+                }
+            });
+
+            const result = await response.json();
+            console.log(result);
         }
     """;
 

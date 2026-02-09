@@ -5,10 +5,11 @@
 -- insert into myentity (id, field) values(3, 'field-3');
 -- alter sequence myentity_seq restart with 4;
 
-insert into hero (name, heroClass, race, weapon, focusedFire, steadyFrame, strongArms, jackOfAllTrades) values ('Jayce' , 'WARRIOR' , 'HUMAN' , 'SWORD', false , false , false , true );
-insert into hero (name, heroClass, race, weapon, focusedFire, steadyFrame, strongArms, jackOfAllTrades) values ('Sammy' , 'ROGUE'   , 'ELF'   , 'SWORD', true  , false , false , false);
-insert into hero (name, heroClass, race, weapon, focusedFire, steadyFrame, strongArms, jackOfAllTrades) values ('Gronk' , 'PALADIN' , 'DWARF' , 'SWORD', false , true  , false , false);
-insert into hero (name, heroClass, race, weapon, focusedFire, steadyFrame, strongArms, jackOfAllTrades) values ('Nark'  , 'MAGE'    , 'ORC'   , 'SWORD', false , false , true  , false);
+insert into hero (name, heroClass, race, weapon, focusedFire, steadyFrame, strongArms, jackOfAllTrades, ownerApiKey) values ('Jayce' , 'WARRIOR' , 'HUMAN' , 'SWORD', false , false , false , true , 123456);
+insert into hero (name, heroClass, race, weapon, focusedFire, steadyFrame, strongArms, jackOfAllTrades, ownerApiKey) values ('Sammy' , 'ROGUE'   , 'ELF'   , 'DAGGER', true  , false , false , false, 123456);
+insert into hero (name, heroClass, race, weapon, focusedFire, steadyFrame, strongArms, jackOfAllTrades, ownerApiKey) values ('Gronk' , 'PALADIN' , 'DWARF' , 'MACE', false , true  , false , false, 123456);
+insert into hero (name, heroClass, race, weapon, focusedFire, steadyFrame, strongArms, jackOfAllTrades, ownerApiKey) values ('Nark'  , 'MAGE'    , 'ORC'   , 'STAFF', false , false , true  , false, 123456);
+insert into hero (name, heroClass, race, weapon, focusedFire, steadyFrame, strongArms, jackOfAllTrades, ownerApiKey) values ('Sad'  , 'MAGE'    , 'ELF'   , 'STAFF', false , false , true  , false, 'wrongId');
 
 
 -- Lägger till en enda test-user. Vi behöver inte testa lösenord och sådant längre, så det är irrelevant
@@ -19,5 +20,5 @@ insert into hero (name, heroClass, race, weapon, focusedFire, steadyFrame, stron
 -- välj 'Auth type: API Key
 -- ställ in:
 -- Key: X-API-KEY
--- Value: <nyckeln>
-insert into users (id, username, password, api_key, role) values (111, 'asdf', 'asdf', '123456', 'user');
+-- Value: <nyckeln> (i det här fallet 123456)
+insert into users (id, username, password, api_key) values (111, 'asdf', 'asdf', '123456');

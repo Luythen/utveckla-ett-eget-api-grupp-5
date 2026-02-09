@@ -29,6 +29,9 @@ public class Hero {
     private Weapon weapon;
     
     private String name;
+    private String ownerApiKey;
+    private String ownerName;
+
     private boolean focusedFire;     // Elf specifik
     private boolean steadyFrame;     // Dwarf specifik
     private boolean strongArms;      // Orc specifik
@@ -112,6 +115,24 @@ public class Hero {
 
     public Hero setWeapon(Weapon weapon) {
         this.weapon = weapon;
+        return this;
+    }
+
+    public String getOwnerApiKey() {
+        return ownerApiKey;
+    }
+
+    public Hero setOwnerApiKey(String ownerApiKey) {
+        this.ownerApiKey = ownerApiKey;
+        return this;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public Hero setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
         return this;
     }
 

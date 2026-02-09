@@ -36,11 +36,18 @@ public class UserService {
         User user = new User()
                 .setUsername(userDto.getUsername())
                 .setPassword(BcryptUtil.bcryptHash(userDto.getPassword()))
-                .setApiKey(UUID.randomUUID().toString())
-                .setRole("user");
+                .setApiKey(UUID.randomUUID().toString());
 
         user.persist();
     }
+
+
+    public User getUserByApiKey(String apiKey){
+        return em.createQuery("SELECT u FROM User u WHERE u.apiKey = :apiKey", User.class)
+        .setParameter("apiKey", apiKey)
+        .getSingleResult();
+    }
+
 
     // Kontrollerar om ett användarnamn redan är registrerat i databasen.
     // Returnerar true om användaren finns, annars false.
@@ -66,7 +73,7 @@ public class UserService {
 
     }
 
-    private User returnUser(String username) {
+    public User returnUser(String username) {
         try {
             return em
                     .createQuery("SELECT u FROM User u Where u.username = :username", User.class)

@@ -10,6 +10,7 @@ import org.bouncycastle.openssl.PasswordException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.NoResultException;
 import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.core.NewCookie;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
@@ -50,6 +51,10 @@ public class ResourceHelper {
 
     public Response respond(User user) {
         return Response.ok(user).build();
+    }
+
+    public Response respond (NewCookie newCookie) {
+        return Response.ok().cookie(newCookie).build();
     }
 
     // Returnerar 'OK' resultat för listor (kör wildcard för att hantera olika typer (trots att det troligtvis är heroresponse i alla))

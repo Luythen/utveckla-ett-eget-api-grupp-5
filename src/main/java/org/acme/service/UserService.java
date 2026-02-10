@@ -79,6 +79,18 @@ public class UserService {
 
     }
 
+    public User loginUser(String username, String password) {
+
+        User user = returnUser(username);
+
+        if (!BcryptUtil.matches(password, user.getPassword())) {
+            throw new IllegalArgumentException("Wrong password");
+        }
+
+        return user;
+
+    }
+
     // returnerar användare baserat på namn
     public User returnUser(String username) {
         try {
